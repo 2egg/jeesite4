@@ -33,12 +33,12 @@ server:
 # 数据库连接
 jdbc: 
   
-  # Mysql 数据库配置
+  # 本地mysql 数据库配置
   type: mysql
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://49.233.183.54:3306/jeesite?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
-  username: hlj
-  password: hlj196820...
+  url: jdbc:mysql://localhost:3306/jeesite?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+  username: root
+  password: 123456
   testSql: SELECT 1
 
 #  # Oracle 数据库配置
