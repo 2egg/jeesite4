@@ -1,0 +1,341 @@
+<% layout('/layouts/default.html', {title: '合同明细表管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-notebook"></i> ${text('合同明细表管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('contract:contractDetailed:edit')){ %>
+					<a href="${ctx}/contract/contractDetailed/form" class="btn btn-default btnTool" title="${text('新增合同明细表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${contractDetailed}" action="${ctx}/contract/contractDetailed/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('合同编号')}：</label>
+					<div class="control-inline">
+						<#form:input path="htbh" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('项目名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="xmmc" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('委托单位')}：</label>
+					<div class="control-inline">
+						<#form:input path="wtdw" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('合同类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="htlx" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('属性')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="sx" dictType="contract_attribute" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('年份')}：</label>
+					<div class="control-inline">
+						<#form:input path="nf" readonly="true" maxlength="20" class="form-control Wdate-date"
+							dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('月份')}：</label>
+					<div class="control-inline">
+						<#form:input path="yf" readonly="true" maxlength="20" class="form-control Wdate-date"
+							dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('所属部门')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="ssbm" title="${text('机构选择')}"
+							path="ssbm.officeCode" labelPath="ssbm.officeName" 
+							url="${ctx}/sys/office/treeData" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('主管领导')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="zgld" title="${text('用户选择')}"
+							path="zgld.userCode" labelPath="zgld.userName" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('部门经理')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="bmjl" title="${text('用户选择')}"
+							path="bmjl.userCode" labelPath="bmjl.userName" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('负责人')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="fzr" title="${text('用户选择')}"
+							path="fzr.userCode" labelPath="fzr.userName" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('信息缺失')}：</label>
+					<div class="control-inline">
+						<#form:input path="xxqs" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('合同备注')}：</label>
+					<div class="control-inline">
+						<#form:input path="htbz" maxlength="1000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('收费标准')}：</label>
+					<div class="control-inline">
+						<#form:input path="sfbz" maxlength="3000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('付款方式')}：</label>
+					<div class="control-inline">
+						<#form:input path="fkfs" maxlength="3000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('业务范围')}：</label>
+					<div class="control-inline">
+						<#form:input path="ywfw" maxlength="1000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('服务周期')}：</label>
+					<div class="control-inline">
+						<#form:input path="fwzq" maxlength="3000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('登记人')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="djr" title="${text('用户选择')}"
+							path="djr" labelPath="" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('登记日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="djrq" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('归档日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="gdrq" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('签订日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="qdrq" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('工程规模m2')}：</label>
+					<div class="control-inline">
+						<#form:input path="gcgm" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('投资额')}：</label>
+					<div class="control-inline">
+						<#form:input path="tze" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('合同金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="htje" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('业绩金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="yjje" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('应发金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="yfje" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('印花税')}：</label>
+					<div class="control-inline">
+						<#form:input path="yhs" maxlength="200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('联系人')}：</label>
+					<div class="control-inline">
+						<#form:input path="lxr" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('电话')}：</label>
+					<div class="control-inline">
+						<#form:input path="dh" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('支付情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="zfqk" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('参与人')}：</label>
+					<div class="control-inline">
+						<#form:input path="cyr" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('补充协议')}：</label>
+					<div class="control-inline">
+						<#form:input path="bcxy" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('合同范围')}：</label>
+					<div class="control-inline">
+						<#form:input path="htfw" maxlength="1000" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('写入时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="date" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('网盘id')}：</label>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('标记')}：</label>
+					<div class="control-inline">
+						<#form:input path="bj" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('履行进度')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="lxjd" dictType="" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('填写日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="txrq" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('项目进度')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="xmjd" dictType="" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('归档进度')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="gdjd" dictType="" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('所在省市')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="szss" title="${text('区域选择')}"
+							path="szss" labelPath="" 
+							url="${ctx}/sys/area/treeData" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('所在市区')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="szsq" title="${text('区域选择')}"
+							path="szsq" labelPath="" 
+							url="${ctx}/sys/area/treeData" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('项目类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="xmlx" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('合同负责人')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="htfzr" title="${text('用户选择')}"
+							path="htfzr" labelPath="" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("合同编号")}', name:'htbh', index:'a.htbh', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/contract/contractDetailed/form?id='+row.id+'" class="btnList" data-title="${text("编辑合同明细表")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("项目名称")}', name:'xmmc', index:'a.xmmc', width:150, align:"left"},
+		{header:'${text("委托单位")}', name:'wtdw', index:'a.wtdw', width:150, align:"left"},
+		{header:'${text("合同类型")}', name:'htlx', index:'a.htlx', width:150, align:"left"},
+		{header:'${text("所属部门")}', name:'ssbm.officeName', index:'a.ssbm', width:150, align:"center"},
+		{header:'${text("负责人")}', name:'fzr.userName', index:'a.fzr', width:150, align:"center"},
+		{header:'${text("合同负责人")}', name:'', index:'a.htfzr', width:150, align:"center"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('contract:contractDetailed:edit')){ %>
+				actions.push('<a href="${ctx}/contract/contractDetailed/form?id='+row.id+'" class="btnList" title="${text("编辑合同明细表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/contract/contractDetailed/delete?id='+row.id+'" class="btnList" title="${text("删除合同明细表")}" data-confirm="${text("确认要删除该合同明细表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

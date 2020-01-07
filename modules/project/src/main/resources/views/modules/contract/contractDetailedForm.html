@@ -1,0 +1,518 @@
+<% layout('/layouts/default.html', {title: '合同明细表管理', libs: ['validate','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa icon-note"></i> ${text(contractDetailed.isNewRecord ? '新增合同明细表' : '编辑合同明细表')}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${contractDetailed}" action="${ctx}/contract/contractDetailed/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<div class="form-unit">${text('基本信息')}</div>
+				<#form:hidden path="id"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同编号')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="htbh" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('项目名称')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="xmmc" maxlength="500" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('委托单位')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="wtdw" maxlength="500" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同类型')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="htlx" maxlength="20" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('属性')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:select path="sx" dictType="contract_attribute" blankOption="true" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('年份')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="nf" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('月份')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="yf" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('所属部门')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="ssbm" title="${text('机构选择')}"
+									path="ssbm.officeCode" labelPath="ssbm.officeName"
+									url="${ctx}/sys/office/treeData"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('主管领导')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="zgld" title="${text('用户选择')}"
+									path="zgld.userCode" labelPath="zgld.userName"
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('部门经理')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="bmjl" title="${text('用户选择')}"
+									path="bmjl.userCode" labelPath="bmjl.userName"
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('负责人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="fzr" title="${text('用户选择')}"
+									path="fzr.userCode" labelPath="fzr.userName"
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('信息缺失')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="xxqs" maxlength="500" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同备注')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:textarea path="htbz" rows="4" maxlength="1000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('收费标准')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:textarea path="sfbz" rows="4" maxlength="3000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('付款方式')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="fkfs" maxlength="3000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('业务范围')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="ywfw" maxlength="1000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('服务周期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="fwzq" maxlength="3000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('登记人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="djr" title="${text('用户选择')}"
+									path="djr" labelPath=""
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('登记日期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="djrq" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('归档日期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="gdrq" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('签订日期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="qdrq" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('工程规模m2')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="gcgm" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('投资额')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="tze" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同金额')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="htje" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('业绩金额')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="yjje" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('应发金额')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="yfje" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('印花税')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="yhs" maxlength="200" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('联系人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="lxr" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('电话')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="dh" maxlength="100" class="form-control phone"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('支付情况')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:textarea path="zfqk" rows="4" maxlength="20" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('参与人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="cyr" maxlength="64" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('补充协议')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="bcxy" maxlength="20" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同范围')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="htfw" maxlength="1000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('写入时间')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="date" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+				<#form:hidden path="uuid"/>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('标记')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="bj" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('履行进度')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:select path="lxjd" dictType="" blankOption="true" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('填写日期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="txrq" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:true});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('项目进度')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:select path="xmjd" dictType="" blankOption="true" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('归档进度')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:select path="gdjd" dictType="" blankOption="true" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('所在省市')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="szss" title="${text('区域选择')}"
+									path="szss" labelPath=""
+									url="${ctx}/sys/area/treeData"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('所在市区')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="szsq" title="${text('区域选择')}"
+									path="szsq" labelPath=""
+									url="${ctx}/sys/area/treeData"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('项目类型')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:input path="xmlx" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('合同负责人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+															<#form:treeselect id="htfzr" title="${text('用户选择')}"
+									path="htfzr" labelPath=""
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">${text('附件上传')}：</label>
+							<div class="col-sm-10">
+								<#form:fileupload id="uploadFile" bizKey="${contractDetailed.id}" bizType="contractDetailed_file"
+									uploadType="all" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('contract:contractDetailed:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+</script>
